@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 
@@ -68,15 +69,96 @@ public class LifecycleMonitorActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState == null)
+        {
+        	Log.d(Constants.TAG, "onCreate() method was invoked first time");
+        } else
+        {
+        	Log.d(Constants.TAG, "onCreate() method was invoked == deja apelata");
+        }
         setContentView(R.layout.activity_lifecycle_monitor);
         
         Button okButton = (Button)findViewById(R.id.ok_button);
         okButton.setOnClickListener(buttonClickListener);
         Button cancelButton = (Button)findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(buttonClickListener);
-        Log.d(Constants.TAG, "onCreate() method was invoked");
-    }    
-
+        
+        
+    }
+    
+    
+    @Override
+    protected void onStart() {
+      super.onStart();
+      Log.d(Constants.TAG, "onStart method was invoked");
+    }
+   
+    @Override
+    protected void onResume() {
+      super.onResume();
+      Log.d(Constants.TAG, "onResume method was invoked");
+    }
+   
+    @Override
+    protected void onPause() {
+      super.onPause();
+      Log.d(Constants.TAG, "onPause method was invoked");
+    }
+   
+    @Override
+    protected void onStop() {
+      super.onStop();
+      Log.d(Constants.TAG, "onStop method was invoked");
+    }
+   
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+      Log.d(Constants.TAG, "onDestroy method was invoked");
+    }
+   
+    @Override
+    protected void onRestart() {
+      super.onRestart();
+      Log.d(Constants.TAG, "onRestart method was invoked");
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState)
+    {
+    	super.onSaveInstanceState(savedInstanceState);
+    	CheckBox ck = (CheckBox)findViewById(R.id.remember_me_checkbox);
+    	if(ck.isChecked())
+    	{
+    		EditText ed = (EditText)findViewById(R.id.username_edit_text);
+    		savedInstanceState.putString(Constants.USERNAME_EDIT_TEXT, ed.getText().toString());
+    		EditText passwordEditText = (EditText)findViewById(R.id.password_edit_text);
+    		savedInstanceState.putString(Constants.PASSWORD_EDIT_TEXT,passwordEditText.getText().toString());
+    	}
+    }
+    
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+    	super.onRestoreInstanceState(savedInstanceState);
+    	if (savedInstanceState != null)
+    	{
+    		if (savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT) != null)
+    		{
+        		EditText ed = (EditText)findViewById(R.id.username_edit_text);
+        		ed.setText(savedInstanceState.getString(Constants.USERNAME_EDIT_TEXT));
+    		}
+    		
+    		if(savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT) != null)
+    		{
+    			EditText passwordEditText = (EditText)findViewById(R.id.password_edit_text);
+        		passwordEditText.setText(savedInstanceState.getString(Constants.PASSWORD_EDIT_TEXT));
+    		}
+    		
+    	}
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
